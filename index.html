@@ -3,56 +3,45 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>정밀 만세력 PRO (통합본)</title>
-    <script src="https://cdn.jsdelivr.net/npm/lunar-javascript@1.6.12/lunar.min.js"></script>
+    <title>정밀 만세력 PRO (디버깅 완료)</title>
+    <script src="https://cdn.jsdelivr.net/npm/lunar-javascript/lunar.min.js"></script>
     <style>
-        /* [디자인 영역] */
-        body { font-family: 'Pretendard', 'Malgun Gothic', sans-serif; background-color: #f0f2f5; padding: 20px; margin: 0; color: #333; }
-        .container { max-width: 600px; margin: 0 auto; background: white; padding: 25px; border-radius: 15px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); }
-        h1 { text-align: center; margin-bottom: 25px; color: #2c3e50; border-bottom: 2px solid #3498db; padding-bottom: 15px; font-size: 22px; }
+        /* 디자인 영역 */
+        body { font-family: 'Pretendard', 'Malgun Gothic', sans-serif; background: #f0f2f5; padding: 20px; color: #333; }
+        .container { max-width: 600px; margin: 0 auto; background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        h1 { text-align: center; border-bottom: 2px solid #2980b9; padding-bottom: 15px; margin-bottom: 20px; color: #2c3e50; }
         
-        /* 입력 폼 스타일 */
         .form-group { margin-bottom: 15px; display: flex; align-items: center; justify-content: space-between; }
-        .form-group label { font-weight: bold; color: #555; width: 30%; font-size: 15px; }
-        .form-group input, .form-group select { width: 68%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 16px; box-sizing: border-box; }
-        .form-group input:focus, .form-group select:focus { border-color: #3498db; outline: none; }
+        .form-group label { font-weight: bold; width: 30%; }
+        .form-group input, .form-group select { width: 65%; padding: 12px; border: 1px solid #ccc; border-radius: 6px; font-size: 16px; }
+        
+        button { width: 100%; padding: 15px; background: #2980b9; color: white; border: none; border-radius: 6px; font-size: 18px; font-weight: bold; cursor: pointer; margin-top: 20px; }
+        button:hover { background: #1c5980; }
 
-        /* 버튼 스타일 */
-        button { width: 100%; padding: 15px; background-color: #34495e; color: white; border: none; border-radius: 8px; font-size: 18px; font-weight: bold; cursor: pointer; margin-top: 15px; transition: 0.2s; }
-        button:hover { background-color: #2c3e50; transform: translateY(-2px); }
-
-        /* 결과 영역 스타일 */
+        /* 결과창 */
         #resultArea { display: none; margin-top: 30px; border-top: 2px solid #eee; padding-top: 20px; }
-        
-        .saju-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px; text-align: center; margin-bottom: 25px; }
-        .pillar { background: #f8f9fa; padding: 10px 2px; border-radius: 8px; border: 1px solid #e9ecef; }
-        .pillar-head { font-size: 13px; color: #7f8c8d; margin-bottom: 8px; }
-        .gan, .ji { font-size: 26px; font-weight: 900; display: block; margin: 4px 0; font-family: serif; }
+        .saju-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px; text-align: center; margin-bottom: 20px; }
+        .pillar { background: #f9f9f9; padding: 10px 5px; border-radius: 8px; border: 1px solid #eee; }
+        .gan, .ji { font-size: 26px; font-weight: 900; display: block; margin: 5px 0; font-family: serif; }
 
-        /* 오행 색상 (사용자 지정: 목=파란색) */
-        .wood { color: #0040FF !important; }  
-        .fire { color: #FF0000 !important; }  
-        .earth { color: #E6B800 !important; } 
-        .metal { color: #666666 !important; } 
-        .water { color: #000000 !important; } 
+        /* 오행 색상 */
+        .wood { color: #0040FF !important; } .fire { color: #FF0000 !important; }
+        .earth { color: #E6B800 !important; } .metal { color: #666666 !important; }
+        .water { color: #000000 !important; }
 
-        /* 대운 & 세운 박스 */
-        .info-box { background: #fff; border: 1px solid #dfe6e9; padding: 15px; border-radius: 8px; margin-bottom: 15px; }
-        .info-title { font-weight: bold; font-size: 16px; margin-bottom: 10px; color: #2d3436; border-bottom: 1px solid #eee; padding-bottom: 5px; }
-        
-        .daeun-scroll { display: flex; overflow-x: auto; gap: 8px; padding-bottom: 5px; }
-        .daeun-card { min-width: 50px; background: #fdfdfd; border: 1px solid #eee; border-radius: 6px; padding: 8px; text-align: center; flex-shrink: 0; }
-        .daeun-age { font-size: 12px; color: #999; margin-bottom: 4px; }
+        /* 대운 리스트 */
+        .daeun-scroll { display: flex; overflow-x: auto; gap: 10px; padding-bottom: 10px; }
+        .daeun-card { min-width: 60px; background: #fff; border: 1px solid #ddd; padding: 10px; border-radius: 6px; text-align: center; flex-shrink: 0; }
     </style>
 </head>
 <body>
 
     <div class="container">
-        <h1>🔮 정밀 만세력 PRO (통합본)</h1>
+        <h1>🔮 정밀 만세력 PRO</h1>
         
         <div class="form-group">
             <label>이름</label>
-            <input type="text" id="name" placeholder="홍길동">
+            <input type="text" id="name" placeholder="이름 입력" value="사용자">
         </div>
         <div class="form-group">
             <label>성별</label>
@@ -63,64 +52,40 @@
         </div>
         <div class="form-group">
             <label>생년월일</label>
-            <input type="number" id="bDate" placeholder="19941007 (8자리)">
+            <input type="number" id="bDate" placeholder="19941007" value="">
         </div>
         <div class="form-group">
             <label>출생시간</label>
-            <input type="number" id="bTime" placeholder="1430 (4자리)">
+            <input type="number" id="bTime" placeholder="1430" value="">
         </div>
         <div class="form-group">
             <label>출생지역</label>
             <select id="location">
-                <option value="">데이터 로딩중...</option>
+                <option value="">데이터 로딩 중...</option>
             </select>
         </div>
 
-        <button onclick="calculateSaju()">만세력 확인하기</button>
+        <button onclick="calculateSaju()">내 사주 확인하기</button>
 
         <div id="resultArea">
             <div class="saju-grid">
-                <div class="pillar">
-                    <div class="pillar-head">시주 (Time)</div>
-                    <span id="siGan" class="gan">-</span>
-                    <span id="siJi" class="ji">-</span>
-                </div>
-                <div class="pillar">
-                    <div class="pillar-head">일주 (Day)</div>
-                    <span id="ilGan" class="gan">-</span>
-                    <span id="ilJi" class="ji">-</span>
-                </div>
-                <div class="pillar">
-                    <div class="pillar-head">월주 (Month)</div>
-                    <span id="wolGan" class="gan">-</span>
-                    <span id="wolJi" class="ji">-</span>
-                </div>
-                <div class="pillar">
-                    <div class="pillar-head">연주 (Year)</div>
-                    <span id="yeonGan" class="gan">-</span>
-                    <span id="yeonJi" class="ji">-</span>
-                </div>
-            </div>
-
-            <div class="info-box">
-                <div class="info-title">📅 대운(大運) 흐름</div>
-                <div id="daeunInfo" style="font-size:14px; margin-bottom:8px;"></div>
-                <div id="daeunList" class="daeun-scroll"></div>
-            </div>
-
-            <div class="info-box">
-                <div class="info-title">🚀 세운(歲運)</div>
-                <div id="seunInfo" style="font-size:15px; line-height:1.4;"></div>
+                <div class="pillar"><span>시주</span><span id="siGan" class="gan"></span><span id="siJi" class="ji"></span></div>
+                <div class="pillar"><span>일주</span><span id="ilGan" class="gan"></span><span id="ilJi" class="ji"></span></div>
+                <div class="pillar"><span>월주</span><span id="wolGan" class="gan"></span><span id="wolJi" class="ji"></span></div>
+                <div class="pillar"><span>연주</span><span id="yeonGan" class="gan"></span><span id="yeonJi" class="ji"></span></div>
             </div>
             
-            <div style="text-align:center; font-size:11px; color:#aaa; margin-top:20px;">
-                * 진태양시(균시차+경도) 정밀 보정 적용 완료
+            <div style="background:#f4f4f4; padding:15px; border-radius:8px;">
+                <div id="daeunInfo" style="font-weight:bold; margin-bottom:10px;"></div>
+                <div id="daeunList" class="daeun-scroll"></div>
             </div>
+            
+            <div id="seunInfo" style="margin-top:15px; padding:10px; background:#eef; border-radius:8px;"></div>
         </div>
     </div>
 
     <script>
-        // 1. 163개 지역 데이터 (엑셀 완벽 반영)
+        // 1. 163개 지역 데이터 (인덱스 오류 방지를 위해 전역변수로 선언)
         const LOCATIONS = [
             {name: "서울", lon: 126.9783}, {name: "부산", lon: 129.0750}, {name: "대구", lon: 128.6025}, {name: "인천", lon: 126.7052}, 
             {name: "광주(전라)", lon: 126.8515}, {name: "대전", lon: 127.3845}, {name: "울산", lon: 129.3114}, {name: "세종", lon: 127.2892}, 
@@ -165,18 +130,16 @@
             {name: "합천", lon: 128.1658}, {name: "제주", lon: 126.5312}, {name: "서귀포", lon: 126.5601}
         ];
 
-        // 2. 초기 로딩 및 지역 목록 채우기
+        // 2. 초기 로딩 시 지역 목록 채우기
         window.onload = function() {
-            // 라이브러리 체크
+            // 라이브러리 로드 체크
             if(typeof Solar === 'undefined') {
-                alert('⚠️ 계산 도구(Lunar.js) 로딩 실패!\n네트워크 문제일 수 있습니다. 새로고침 해주세요.');
+                alert("⚠️ 계산 도구(Lunar.js) 로드 실패!\n인터넷 연결을 확인하고 새로고침 하세요.");
                 return;
             }
-
+            
             const sel = document.getElementById('location');
             sel.innerHTML = '<option value="">지역을 선택하세요</option>';
-            
-            // 가나다순 정렬
             LOCATIONS.sort((a, b) => a.name.localeCompare(b.name));
             LOCATIONS.forEach((loc, idx) => {
                 let opt = document.createElement('option');
@@ -186,17 +149,16 @@
             });
         };
 
-        // 3. 균시차(EOT) 계산 (진태양시 핵심)
+        // 3. 균시차(EOT) 공식
         function getEquationOfTime(date) {
             const start = new Date(date.getFullYear(), 0, 0);
             const diff = date - start;
             const dayOfYear = Math.floor(diff / (1000 * 60 * 60 * 24));
             const B = (2 * Math.PI / 365) * (dayOfYear - 81);
-            // 공식: 9.87 sin(2B) - 7.53 cos(B) - 1.5 sin(B) (분 단위)
             return 9.87 * Math.sin(2 * B) - 7.53 * Math.cos(B) - 1.5 * Math.sin(B);
         }
 
-        // 4. 오행 색상 매핑
+        // 4. 오행 색상
         function getElementClass(char) {
             if("甲乙寅卯".includes(char)) return "wood";
             if("丙丁巳午".includes(char)) return "fire";
@@ -206,18 +168,19 @@
             return "";
         }
 
-        // 5. 메인 계산 함수
+        // 5. 계산 함수 (에러 방지 로직 강화)
         function calculateSaju() {
             try {
-                // 입력 확인
+                // 입력값 가져오기
                 const bDate = document.getElementById('bDate').value;
                 const bTime = document.getElementById('bTime').value;
                 const locIdx = document.getElementById('location').value;
                 const gender = document.getElementById('gender').value;
 
-                if(bDate.length !== 8) return alert("생년월일 8자리를 입력해주세요 (예: 19941007)");
-                if(bTime.length !== 4) return alert("출생시간 4자리를 입력해주세요 (예: 1430)");
-                if(locIdx === "") return alert("출생지역을 선택해주세요.");
+                // [중요] 유효성 검사
+                if(!bDate || bDate.length !== 8) return alert("생년월일 8자리를 입력해주세요");
+                if(!bTime || bTime.length !== 4) return alert("출생시간 4자리를 입력해주세요");
+                if(locIdx === "") return alert("지역을 선택해주세요");
 
                 const year = parseInt(bDate.substring(0, 4));
                 const month = parseInt(bDate.substring(4, 6));
@@ -225,29 +188,30 @@
                 const hour = parseInt(bTime.substring(0, 2));
                 const minute = parseInt(bTime.substring(2, 4));
 
-                // ----------------------------------------------------
-                // [정밀 진태양시 보정]
-                // 1. 경도 보정: (경도 - 135) * 4
-                const location = LOCATIONS[document.getElementById('location').selectedIndex - 1]; // option 0은 안내문구라서 -1 보정 필요할 수 있음. 
-                // 안전하게 value(idx)로 찾기:
+                // ------------------------------------------------
+                // [진태양시 보정]
+                // 1. 지역 좌표 찾기 (전역변수 배열에서 안전하게 조회)
                 const realLoc = LOCATIONS[locIdx];
-                
+                if (!realLoc) throw new Error("지역 데이터를 찾을 수 없습니다.");
+
                 const lonOffset = (realLoc.lon - 135) * 4;
                 
-                // 2. 균시차 보정
+                // 2. 균시차 계산
                 const baseDate = new Date(year, month - 1, day, hour, minute);
+                if (isNaN(baseDate.getTime())) throw new Error("날짜 형식이 잘못되었습니다.");
+                
                 const eotOffset = getEquationOfTime(baseDate);
 
-                // 3. 최종 시간
+                // 3. 최종 보정 시간
                 let adjDate = new Date(baseDate.getTime());
                 adjDate.setMinutes(adjDate.getMinutes() + lonOffset + eotOffset);
-                // ----------------------------------------------------
+                // ------------------------------------------------
 
-                // 라이브러리 계산
+                // [사주 계산]
                 const lunar = Lunar.fromDate(adjDate);
                 const baZi = lunar.getEightChar();
-
-                // 화면 출력 헬퍼
+                
+                // [화면 출력]
                 const setCell = (idG, idJ, gan, ji) => {
                     const elG = document.getElementById(idG);
                     const elJ = document.getElementById(idJ);
@@ -255,45 +219,48 @@
                     elJ.innerText = ji; elJ.className = "ji " + getElementClass(ji);
                 };
 
-                // 사주 팔자 출력
                 setCell('siGan', 'siJi', baZi.getTimeGan(), baZi.getTimeZhi());
                 setCell('ilGan', 'ilJi', baZi.getDayGan(), baZi.getDayZhi());
                 setCell('wolGan', 'wolJi', baZi.getMonthGan(), baZi.getMonthZhi());
                 setCell('yeonGan', 'yeonJi', baZi.getYearGan(), baZi.getYearZhi());
 
-                // 대운 계산
+                // [yun 에러 방지 구역]
+                // gender 값을 숫자(1=남, 0=여)로 명확하게 변환
                 const genderNum = (gender === "남") ? 1 : 0;
-                const yun = baZi.getYun(genderNum);
-                const dirStr = yun.getGender() === 1 ? "순행" : "역행";
+                
+                // baZi 객체가 정상인지 확인 후 호출
+                if (baZi) {
+                    const yun = baZi.getYun(genderNum); // 여기서 에러가 났었음
+                    const dirStr = yun.getGender() === 1 ? "순행" : "역행";
 
-                document.getElementById('daeunInfo').innerHTML = 
-                    `<b>${yun.getStartAge()}</b>세 마다 대운이 바뀝니다 (${dirStr})`;
+                    document.getElementById('daeunInfo').innerHTML = 
+                        `<span style="color:#2980b9;">${yun.getStartAge()}</span>세 대운 (${dirStr})`;
 
-                // 대운 리스트
-                const listDiv = document.getElementById('daeunList');
-                listDiv.innerHTML = "";
-                yun.getDaYun().forEach((dy, i) => {
-                    if(i >= 10) return;
-                    const gan = dy.getGanZhi()[0];
-                    const ji = dy.getGanZhi()[1];
-                    const div = document.createElement('div');
-                    div.className = "daeun-card";
-                    div.innerHTML = `<div class="daeun-age">${dy.getStartAge()}세</div><div style="font-size:18px"><span class="${getElementClass(gan)}">${gan}</span><br><span class="${getElementClass(ji)}">${ji}</span></div>`;
-                    listDiv.appendChild(div);
-                });
+                    const listDiv = document.getElementById('daeunList');
+                    listDiv.innerHTML = "";
+                    
+                    yun.getDaYun().forEach((dy, i) => {
+                        if(i >= 10) return;
+                        const gan = dy.getGanZhi()[0];
+                        const ji = dy.getGanZhi()[1];
+                        const div = document.createElement('div');
+                        div.className = "daeun-card";
+                        div.innerHTML = `<div class="daeun-age">${dy.getStartAge()}세</div><div><span class="${getElementClass(gan)}" style="font-size:18px; font-weight:bold;">${gan}</span><br><span class="${getElementClass(ji)}" style="font-size:18px; font-weight:bold;">${ji}</span></div>`;
+                        listDiv.appendChild(div);
+                    });
+                }
 
-                // 세운 (올해)
+                // [세운]
                 const thisYearLunar = Lunar.fromDate(new Date());
                 const tyGan = thisYearLunar.getYearGan();
                 const tyJi = thisYearLunar.getYearZhi();
-                document.getElementById('seunInfo').innerHTML = `올해는 <b class="${getElementClass(tyGan)}">${tyGan}</b><b class="${getElementClass(tyJi)}">${tyJi}</b>년 입니다.`;
+                document.getElementById('seunInfo').innerHTML = `올해는 <b>${tyGan}${tyJi}</b>년 입니다.`;
 
-                // 결과창 보이기
                 document.getElementById('resultArea').style.display = 'block';
 
             } catch (e) {
-                alert("에러 발생: " + e.message);
                 console.error(e);
+                alert("계산 중 오류가 발생했습니다: " + e.message);
             }
         }
     </script>
