@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>정밀 만세력 PRO (통합본)</title>
+    <script src="https://cdn.jsdelivr.net/npm/lunar-javascript@1.6.12/lunar.min.js"></script>
+    <style>
+        /* [디자인 영역] */
+        body { font-family: 'Pretendard', 'Malgun Gothic', sans-serif; background-color: #f0f2f5; padding: 20px; margin: 0; color: #333; }
+        .container { max-width: 600px; margin: 0 auto; background: white; padding: 25px; border-radius: 15px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); }
+        h1 { text-align: center; margin-bottom: 25px; color: #2c3e50; border-bottom: 2px solid #3498db; padding-bottom: 15px; font-size: 22px; }
+        
+        /* 입력 폼 스타일 */
+        .form-group { margin-bottom: 15px; display: flex; align-items: center; justify-content: space-between; }
+        .form-group label { font-weight: bold; color: #555; width: 30%; font-size: 15px; }
+        .form-group input, .form-group select { width: 68%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 16px; box-sizing: border-box; }
+        .form-group input:focus, .form-group select:focus { border-color: #3498db; outline: none; }
+
+        /* 버튼 스타일 */
+        button { width: 100%; padding: 15px; background-color: #34495e; color: white; border: none; border-radius: 8px; font-size: 18px; font-weight: bold; cursor: pointer; margin-top: 15px; transition: 0.2s; }
+        button:hover { background-color: #2c3e50; transform: translateY(-2px); }
+
+        /* 결과 영역 스타일 */
+        #resultArea { display: none; margin-top: 30px; border-top: 2px solid #eee; padding-top: 20px; }
+        
+        .saju-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px; text-align: center; margin-bottom: 25px; }
+        .pillar { background: #f8f9fa; padding: 10px 2px; border-radius: 8px; border: 1px solid #e9ecef; }
+        .pillar-head { font-size: 13px; color: #7f8c8d; margin-bottom: 8px; }
+        .gan, .ji { font-size: 26px; font-weight: 900; display: block; margin: 4px 0; font-family: serif; }
+
+        /* 오행 색상 (사용자 지정: 목=파란색) */
+        .wood { color: #0040FF !important; }  
+        .fire { color: #FF0000 !important; }  
+        .earth { color: #E6B800 !important; } 
+        .metal { color: #666666 !important; } 
+        .water { color: #000000 !important; } 
+
+        /* 대운 & 세운 박스 */
+        .info-box { background: #fff; border: 1px solid #dfe6e9; padding: 15px; border-radius: 8px; margin-bottom: 15px; }
+        .info-title { font-weight: bold; font-size: 16px; margin-bottom: 10px; color: #2d3436; border-bottom: 1px solid #eee; padding-bottom: 5px; }
+        
+        .daeun-scroll { display: flex; overflow-x: auto; gap: 8px; padding-bottom: 5px; }
+        .daeun-card { min-width: 50px; background: #fdfdfd; border: 1px solid #eee; border-radius: 6px; padding: 8px; text-align: center; flex-shrink: 0; }
+        .daeun-age { font-size: 12px; color: #999; margin-bottom: 4px; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>🔮 정밀 만세력 PRO (통합본)</h1>
+        
+        <div class="form-group">
+            <label>이름</label>
+            <input type="text" id="name" placeholder="홍길동">
+        </div>
+        <div class="form-group">
+            <label>성별</label>
+            <select id="gender">
+                <option value="남">남자 (Male)</option>
+                <option value="여">여자 (Female)</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label>생년월일</label>
+            <input type="number" id="bDate" placeholder="19941007 (8자리)">
+        </div>
+        <div class="form-group">
+            <label>출생시간</label>
+            <input type="number" id="bTime" placeholder="1430 (4자리)">
+        </div>
+        <div class="form-group">
+            <label>출생지역</label>
+            <select id="location">
+                <option value="">데이터 로딩중...</option>
+            </select>
+        </div>
+
+        <button onclick="calculateSaju()">만세력 확인하기</button>
+
+        <div id="resultArea">
+            <div class="saju-grid">
+                <div class="pillar">
+                    <div class="pillar-head">시주 (Time)</div>
+                    <span id="siGan" class="gan">-</span>
+                    <span id="siJi" class="ji">-</span>
+                </div>
+                <div class="pillar">
+                    <div class="pillar-head">일주 (Day)</div>
+                    <span id="ilGan" class="gan">-</span>
+                    <span id="ilJi" class="ji">-</span>
+                </div>
+                <div class="pillar">
+                    <div class="pillar-head">월주 (Month)</div>
+                    <span id="wolGan" class="gan">-</span>
+                    <span id="wolJi" class="ji">-</span>
+                </div>
+                <div class="pillar">
+                    <div class="pillar-head">연주 (Year)</div>
+                    <span id="yeonGan" class="gan">-</span>
+                    <span id="yeonJi" class="ji">-</span>
+                </div>
+            </div>
+
+            <div class="info-box">
+                <div class="info-title">📅 대운(大運) 흐름</div>
+                <div id="daeunInfo" style="font-size:14px; margin-bottom:8px;"></div>
+                <div id="daeunList" class="daeun-scroll"></div>
+            </div>
+
+            <div class="info-box">
+                <div class="info-title">🚀 세운(歲運)</div>
+                <div id="seunInfo" style="font-size:15px; line-height:1.4;"></div>
+            </div>
+            
+            <div style="text-align:center; font-size:11px; color:#aaa; margin-top:20px;">
+                * 진태양시(균시차+경도) 정밀 보정 적용 완료
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 1. 163개 지역 데이터 (엑셀 완벽 반영)
+        const LOCATIONS = [
+            {name: "서울", lon: 126.9783}, {name: "부산", lon: 129.0750}, {name: "대구", lon: 128.6025}, {name: "인천", lon: 126.7052}, 
+            {name: "광주(전라)", lon: 126.8515}, {name: "대전", lon: 127.3845}, {name: "울산", lon: 129.3114}, {name: "세종", lon: 127.2892}, 
+            {name: "경기광주", lon: 127.2554}, {name: "수원", lon: 127.0286}, {name: "성남", lon: 127.1389}, {name: "의정부", lon: 127.0338}, 
+            {name: "안양", lon: 126.9568}, {name: "부천", lon: 126.7660}, {name: "광명", lon: 126.8646}, {name: "평택", lon: 127.1129}, 
+            {name: "동두천", lon: 127.0607}, {name: "안산", lon: 126.8308}, {name: "고양", lon: 126.8317}, {name: "과천", lon: 126.9896}, 
+            {name: "구리", lon: 127.1438}, {name: "남양주", lon: 127.2185}, {name: "오산", lon: 127.0776}, {name: "시흥", lon: 126.8031}, 
+            {name: "군포", lon: 126.9351}, {name: "의왕", lon: 126.9740}, {name: "하남", lon: 127.2142}, {name: "용인", lon: 127.1775}, 
+            {name: "파주", lon: 126.7846}, {name: "이천", lon: 127.4387}, {name: "안성", lon: 127.2792}, {name: "김포", lon: 126.7157}, 
+            {name: "화성", lon: 126.8315}, {name: "양주", lon: 127.0459}, {name: "포천", lon: 127.2003}, {name: "여주", lon: 127.6373}, 
+            {name: "연천", lon: 127.0749}, {name: "가평", lon: 127.5109}, {name: "양평", lon: 127.4872}, {name: "춘천", lon: 127.7298}, 
+            {name: "원주", lon: 127.9515}, {name: "강릉", lon: 128.8759}, {name: "동해", lon: 129.1147}, {name: "태백", lon: 128.9858}, 
+            {name: "속초", lon: 128.5918}, {name: "삼척", lon: 129.1651}, {name: "홍천", lon: 127.8887}, {name: "횡성", lon: 127.9850}, 
+            {name: "영월", lon: 128.4651}, {name: "평창", lon: 128.3962}, {name: "정선", lon: 128.6608}, {name: "철원", lon: 127.3115}, 
+            {name: "화천", lon: 127.7083}, {name: "양구", lon: 127.9904}, {name: "인제", lon: 128.1704}, {name: "고성(강원)", lon: 128.4678}, 
+            {name: "양양", lon: 128.6186}, {name: "청주", lon: 127.4897}, {name: "충주", lon: 127.9287}, {name: "제천", lon: 128.2104}, 
+            {name: "보은", lon: 127.7291}, {name: "옥천", lon: 127.5692}, {name: "영동", lon: 127.7830}, {name: "진천", lon: 127.4357}, 
+            {name: "괴산", lon: 127.7923}, {name: "음성", lon: 127.6905}, {name: "단양", lon: 128.3722}, {name: "증평", lon: 127.5815}, 
+            {name: "천안", lon: 127.1139}, {name: "공주", lon: 127.1247}, {name: "보령", lon: 126.5985}, {name: "아산", lon: 127.0016}, 
+            {name: "서산", lon: 126.4503}, {name: "논산", lon: 127.0847}, {name: "계룡", lon: 127.2526}, {name: "당진", lon: 126.6290}, 
+            {name: "금산", lon: 127.4883}, {name: "부여", lon: 126.9097}, {name: "서천", lon: 126.6908}, {name: "청양", lon: 126.8000}, 
+            {name: "홍성", lon: 126.6629}, {name: "예산", lon: 126.8453}, {name: "태안", lon: 126.2925}, {name: "전주", lon: 127.1480}, 
+            {name: "군산", lon: 126.7360}, {name: "익산", lon: 126.9575}, {name: "정읍", lon: 126.8564}, {name: "남원", lon: 127.3905}, 
+            {name: "김제", lon: 126.8809}, {name: "완주", lon: 127.1627}, {name: "진안", lon: 127.4258}, {name: "무주", lon: 127.6608}, 
+            {name: "장수", lon: 127.5211}, {name: "임실", lon: 127.2889}, {name: "순창", lon: 127.1444}, {name: "고창", lon: 126.7021}, 
+            {name: "부안", lon: 126.7330}, {name: "목포", lon: 126.3922}, {name: "여수", lon: 127.6623}, {name: "순천", lon: 127.4875}, 
+            {name: "나주", lon: 126.7160}, {name: "광양", lon: 127.6959}, {name: "담양", lon: 126.9912}, {name: "곡성", lon: 127.2917}, 
+            {name: "구례", lon: 127.4627}, {name: "고흥", lon: 127.2849}, {name: "보성", lon: 127.1702}, {name: "화순", lon: 126.9880}, 
+            {name: "장흥", lon: 126.9073}, {name: "강진", lon: 126.7699}, {name: "해남", lon: 126.6022}, {name: "영암", lon: 126.4631}, 
+            {name: "무안", lon: 126.4817}, {name: "함평", lon: 126.5167}, {name: "영광", lon: 126.5120}, {name: "장성", lon: 126.7850}, 
+            {name: "완도", lon: 126.7226}, {name: "진도", lon: 126.2635}, {name: "신안", lon: 126.1105}, {name: "포항", lon: 129.3435}, 
+            {name: "경주", lon: 129.2247}, {name: "김천", lon: 128.1189}, {name: "안동", lon: 128.7297}, {name: "구미", lon: 128.3510}, 
+            {name: "영주", lon: 128.6250}, {name: "영천", lon: 128.9385}, {name: "상주", lon: 128.1591}, {name: "문경", lon: 128.1993}, 
+            {name: "경산", lon: 128.7540}, {name: "군위", lon: 128.5728}, {name: "의성", lon: 128.6974}, {name: "청송", lon: 129.0572}, 
+            {name: "영양", lon: 129.1148}, {name: "영덕", lon: 129.3653}, {name: "청도", lon: 128.7340}, {name: "고령", lon: 128.2632}, 
+            {name: "성주", lon: 128.2854}, {name: "칠곡", lon: 128.4067}, {name: "예천", lon: 128.5170}, {name: "봉화", lon: 128.7351}, 
+            {name: "울진", lon: 129.4013}, {name: "울릉", lon: 130.9060}, {name: "독도", lon: 131.8696}, {name: "창원", lon: 128.6811}, 
+            {name: "진주", lon: 128.0848}, {name: "통영", lon: 128.4285}, {name: "사천", lon: 128.0707}, {name: "김해", lon: 128.8893}, 
+            {name: "밀양", lon: 128.7483}, {name: "거제", lon: 128.6211}, {name: "양산", lon: 129.0373}, {name: "의령", lon: 128.2618}, 
+            {name: "함안", lon: 128.4065}, {name: "창녕", lon: 128.4921}, {name: "고성(경남)", lon: 128.3220}, {name: "남해", lon: 127.8926}, 
+            {name: "하동", lon: 127.7515}, {name: "산청", lon: 127.8735}, {name: "함양", lon: 127.7252}, {name: "거창", lon: 127.9095}, 
+            {name: "합천", lon: 128.1658}, {name: "제주", lon: 126.5312}, {name: "서귀포", lon: 126.5601}
+        ];
+
+        // 2. 초기 로딩 및 지역 목록 채우기
+        window.onload = function() {
+            // 라이브러리 체크
+            if(typeof Solar === 'undefined') {
+                alert('⚠️ 계산 도구(Lunar.js) 로딩 실패!\n네트워크 문제일 수 있습니다. 새로고침 해주세요.');
+                return;
+            }
+
+            const sel = document.getElementById('location');
+            sel.innerHTML = '<option value="">지역을 선택하세요</option>';
+            
+            // 가나다순 정렬
+            LOCATIONS.sort((a, b) => a.name.localeCompare(b.name));
+            LOCATIONS.forEach((loc, idx) => {
+                let opt = document.createElement('option');
+                opt.value = idx; 
+                opt.text = loc.name;
+                sel.add(opt);
+            });
+        };
+
+        // 3. 균시차(EOT) 계산 (진태양시 핵심)
+        function getEquationOfTime(date) {
+            const start = new Date(date.getFullYear(), 0, 0);
+            const diff = date - start;
+            const dayOfYear = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const B = (2 * Math.PI / 365) * (dayOfYear - 81);
+            // 공식: 9.87 sin(2B) - 7.53 cos(B) - 1.5 sin(B) (분 단위)
+            return 9.87 * Math.sin(2 * B) - 7.53 * Math.cos(B) - 1.5 * Math.sin(B);
+        }
+
+        // 4. 오행 색상 매핑
+        function getElementClass(char) {
+            if("甲乙寅卯".includes(char)) return "wood";
+            if("丙丁巳午".includes(char)) return "fire";
+            if("戊己辰戌丑未".includes(char)) return "earth";
+            if("庚辛申酉".includes(char)) return "metal";
+            if("壬癸亥子".includes(char)) return "water";
+            return "";
+        }
+
+        // 5. 메인 계산 함수
+        function calculateSaju() {
+            try {
+                // 입력 확인
+                const bDate = document.getElementById('bDate').value;
+                const bTime = document.getElementById('bTime').value;
+                const locIdx = document.getElementById('location').value;
+                const gender = document.getElementById('gender').value;
+
+                if(bDate.length !== 8) return alert("생년월일 8자리를 입력해주세요 (예: 19941007)");
+                if(bTime.length !== 4) return alert("출생시간 4자리를 입력해주세요 (예: 1430)");
+                if(locIdx === "") return alert("출생지역을 선택해주세요.");
+
+                const year = parseInt(bDate.substring(0, 4));
+                const month = parseInt(bDate.substring(4, 6));
+                const day = parseInt(bDate.substring(6, 8));
+                const hour = parseInt(bTime.substring(0, 2));
+                const minute = parseInt(bTime.substring(2, 4));
+
+                // ----------------------------------------------------
+                // [정밀 진태양시 보정]
+                // 1. 경도 보정: (경도 - 135) * 4
+                const location = LOCATIONS[document.getElementById('location').selectedIndex - 1]; // option 0은 안내문구라서 -1 보정 필요할 수 있음. 
+                // 안전하게 value(idx)로 찾기:
+                const realLoc = LOCATIONS[locIdx];
+                
+                const lonOffset = (realLoc.lon - 135) * 4;
+                
+                // 2. 균시차 보정
+                const baseDate = new Date(year, month - 1, day, hour, minute);
+                const eotOffset = getEquationOfTime(baseDate);
+
+                // 3. 최종 시간
+                let adjDate = new Date(baseDate.getTime());
+                adjDate.setMinutes(adjDate.getMinutes() + lonOffset + eotOffset);
+                // ----------------------------------------------------
+
+                // 라이브러리 계산
+                const lunar = Lunar.fromDate(adjDate);
+                const baZi = lunar.getEightChar();
+
+                // 화면 출력 헬퍼
+                const setCell = (idG, idJ, gan, ji) => {
+                    const elG = document.getElementById(idG);
+                    const elJ = document.getElementById(idJ);
+                    elG.innerText = gan; elG.className = "gan " + getElementClass(gan);
+                    elJ.innerText = ji; elJ.className = "ji " + getElementClass(ji);
+                };
+
+                // 사주 팔자 출력
+                setCell('siGan', 'siJi', baZi.getTimeGan(), baZi.getTimeZhi());
+                setCell('ilGan', 'ilJi', baZi.getDayGan(), baZi.getDayZhi());
+                setCell('wolGan', 'wolJi', baZi.getMonthGan(), baZi.getMonthZhi());
+                setCell('yeonGan', 'yeonJi', baZi.getYearGan(), baZi.getYearZhi());
+
+                // 대운 계산
+                const genderNum = (gender === "남") ? 1 : 0;
+                const yun = baZi.getYun(genderNum);
+                const dirStr = yun.getGender() === 1 ? "순행" : "역행";
+
+                document.getElementById('daeunInfo').innerHTML = 
+                    `<b>${yun.getStartAge()}</b>세 마다 대운이 바뀝니다 (${dirStr})`;
+
+                // 대운 리스트
+                const listDiv = document.getElementById('daeunList');
+                listDiv.innerHTML = "";
+                yun.getDaYun().forEach((dy, i) => {
+                    if(i >= 10) return;
+                    const gan = dy.getGanZhi()[0];
+                    const ji = dy.getGanZhi()[1];
+                    const div = document.createElement('div');
+                    div.className = "daeun-card";
+                    div.innerHTML = `<div class="daeun-age">${dy.getStartAge()}세</div><div style="font-size:18px"><span class="${getElementClass(gan)}">${gan}</span><br><span class="${getElementClass(ji)}">${ji}</span></div>`;
+                    listDiv.appendChild(div);
+                });
+
+                // 세운 (올해)
+                const thisYearLunar = Lunar.fromDate(new Date());
+                const tyGan = thisYearLunar.getYearGan();
+                const tyJi = thisYearLunar.getYearZhi();
+                document.getElementById('seunInfo').innerHTML = `올해는 <b class="${getElementClass(tyGan)}">${tyGan}</b><b class="${getElementClass(tyJi)}">${tyJi}</b>년 입니다.`;
+
+                // 결과창 보이기
+                document.getElementById('resultArea').style.display = 'block';
+
+            } catch (e) {
+                alert("에러 발생: " + e.message);
+                console.error(e);
+            }
+        }
+    </script>
+</body>
+</html>
