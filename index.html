@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>정밀 만세력 PRO - 진태양시 보정 버전</title>
+    <script src="https://cdn.jsdelivr.net/npm/lunar-javascript@1.6.12/lunar.min.js"></script>
+    <style>
+        body { font-family: 'Malgun Gothic', sans-serif; background-color: #f4f7f6; margin: 0; padding: 20px; color: #333; }
+        .container { max-width: 800px; margin: 0 auto; background: #fff; padding: 30px; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+        h1 { text-align: center; border-bottom: 2px solid #2c3e50; padding-bottom: 15px; margin-bottom: 30px; }
+        
+        .form-row { display: flex; align-items: center; margin-bottom: 15px; }
+        .form-row label { width: 140px; font-weight: bold; }
+        .form-row input, .form-row select { flex: 1; padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 16px; }
+        
+        button { width: 100%; padding: 15px; background: #2c3e50; color: #fff; border: none; border-radius: 6px; font-size: 18px; cursor: pointer; margin-top: 10px; }
+        button:hover { background: #1a252f; }
+
+        #resultArea { display: none; margin-top: 40px; }
+        .saju-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; text-align: center; margin-bottom: 30px; }
+        .pillar { background: #fafafa; border: 1px solid #eee; padding: 15px; border-radius: 10px; }
+        .p-label { font-size: 14px; color: #888; margin-bottom: 8px; }
+        .gan, .ji { font-size: 34px; font-weight: bold; display: block; }
+
+        /* 오행 색상 정의 (목 = 파란색) */
+        .wood { color: #0000FF !important; } .fire { color: #FF0000 !important; }
+        .earth { color: #FFD700 !important; } .metal { color: #A0A0A0 !important; }
+        .water { color: #000000 !important; }
+
+        .info-card { background: #fdfdfd; border: 1px solid #eef; padding: 20px; border-radius: 10px; margin-top: 20px; }
+        .daeun-list { display: flex; overflow-x: auto; gap: 10px; padding: 10px 0; }
+        .daeun-item { min-width: 70px; border: 1px solid #ddd; padding: 8px; border-radius: 6px; text-align: center; background: #fff; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>정밀 만세력 PRO</h1>
+        <div class="form-row"><label>이름</label><input type="text" id="name" value="홍길동"></div>
+        <div class="form-row">
+            <label>성별</label>
+            <select id="gender"><option value="남">남성</option><option value="여">여성</option></select>
+        </div>
+        <div class="form-row"><label>생년월일(8자리)</label><input type="number" id="bDate" value="19800101"></div>
+        <div class="form-row"><label>태어난시간(4자리)</label><input type="number" id="bTime" value="2350"></div>
+        <div class="form-row">
+            <label>출생지역</label>
+            <select id="locSelect"></select>
+        </div>
+        <button onclick="calculateSaju()">사주 명반 생성</button>
+
+        <div id="resultArea">
+            <div class="saju-grid">
+                <div class="pillar"><div class="p-label">시주</div><span id="siG" class="gan"></span><span id="siJ" class="ji"></span></div>
+                <div class="pillar"><div class="p-label">일주</div><span id="ilG" class="gan"></span><span id="ilJ" class="ji"></span></div>
+                <div class="pillar"><div class="p-label">월주</div><span id="wolG" class="gan"></span><span id="wolJ" class="ji"></span></div>
+                <div class="pillar"><div class="p-label">연주</div><span id="yeonG" class="gan"></span><span id="yeonJ" class="ji"></span></div>
+            </div>
+            <div class="info-card">
+                <div id="daeunSummary" style="font-weight:bold; margin-bottom:10px;"></div>
+                <div class="daeun-list" id="daeunList"></div>
+            </div>
+            <div class="info-card" id="seunArea"></div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
