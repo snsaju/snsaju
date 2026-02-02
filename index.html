@@ -3,266 +3,123 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>정밀 만세력 PRO (디버깅 완료)</title>
-    <script src="https://cdn.jsdelivr.net/npm/lunar-javascript/lunar.min.js"></script>
-    <style>
-        /* 디자인 영역 */
-        body { font-family: 'Pretendard', 'Malgun Gothic', sans-serif; background: #f0f2f5; padding: 20px; color: #333; }
-        .container { max-width: 600px; margin: 0 auto; background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
-        h1 { text-align: center; border-bottom: 2px solid #2980b9; padding-bottom: 15px; margin-bottom: 20px; color: #2c3e50; }
-        
-        .form-group { margin-bottom: 15px; display: flex; align-items: center; justify-content: space-between; }
-        .form-group label { font-weight: bold; width: 30%; }
-        .form-group input, .form-group select { width: 65%; padding: 12px; border: 1px solid #ccc; border-radius: 6px; font-size: 16px; }
-        
-        button { width: 100%; padding: 15px; background: #2980b9; color: white; border: none; border-radius: 6px; font-size: 18px; font-weight: bold; cursor: pointer; margin-top: 20px; }
-        button:hover { background: #1c5980; }
-
-        /* 결과창 */
-        #resultArea { display: none; margin-top: 30px; border-top: 2px solid #eee; padding-top: 20px; }
-        .saju-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px; text-align: center; margin-bottom: 20px; }
-        .pillar { background: #f9f9f9; padding: 10px 5px; border-radius: 8px; border: 1px solid #eee; }
-        .gan, .ji { font-size: 26px; font-weight: 900; display: block; margin: 5px 0; font-family: serif; }
-
-        /* 오행 색상 */
-        .wood { color: #0040FF !important; } .fire { color: #FF0000 !important; }
-        .earth { color: #E6B800 !important; } .metal { color: #666666 !important; }
-        .water { color: #000000 !important; }
-
-        /* 대운 리스트 */
-        .daeun-scroll { display: flex; overflow-x: auto; gap: 10px; padding-bottom: 10px; }
-        .daeun-card { min-width: 60px; background: #fff; border: 1px solid #ddd; padding: 10px; border-radius: 6px; text-align: center; flex-shrink: 0; }
-    </style>
+    <title>샌님사주 - 내 운명을 읽다</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <div class="container">
-        <h1>🔮 정밀 만세력 PRO</h1>
-        
-        <div class="form-group">
-            <label>이름</label>
-            <input type="text" id="name" placeholder="이름 입력" value="사용자">
+    <header>
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <img src="images/logo_header.png" alt="샌님사주" class="logo-img">
+	    <span class="logo-text">샌님사주</span>
+            </a>
+            <ul class="nav-menu">
+                <li class="nav-item"><a href="index.html" class="nav-link" style="color:#222;">샌님사주</a></li>
+                <li class="nav-item"><a href="service.html" class="nav-link">사주 서비스</a></li>
+                <li class="nav-item"><a href="analysis.html" class="nav-link">사주 분석</a></li>
+                <li class="nav-item">
+                    <a href="consult.html" class="nav-link">사주 상담</a>
+                </li>
+                <li class="nav-item"><a href="#" class="nav-link">사주 클래스</a></li>
+            </ul>
         </div>
-        <div class="form-group">
-            <label>성별</label>
-            <select id="gender">
-                <option value="남">남자 (Male)</option>
-                <option value="여">여자 (Female)</option>
-            </select>
-        </div>
-        <div class="form-group">
-            <label>생년월일</label>
-            <input type="number" id="bDate" placeholder="19941007" value="">
-        </div>
-        <div class="form-group">
-            <label>출생시간</label>
-            <input type="number" id="bTime" placeholder="1430" value="">
-        </div>
-        <div class="form-group">
-            <label>출생지역</label>
-            <select id="location">
-                <option value="">데이터 로딩 중...</option>
-            </select>
-        </div>
+    </header>
 
-        <button onclick="calculateSaju()">내 사주 확인하기</button>
+    <section style="background-color: #FFFFFF;">
+        <div class="hero-container">
+            <div class="hero-text">
+                <h1>나를 아는 것이<br>변화의 시작입니다</h1>
+                <p>
+                    정통 명리학에 기반한 정밀 만세력으로<br>
+                    당신의 타고난 기질과 운명을 확인해보세요.
+                </p>
+                <a href="service.html" class="btn btn-primary">내 사주 확인하기</a>
+            </div>
+            <div class="hero-img">
+                <img src="images/char_main.png" alt="샌님사주 캐릭터">
+            </div>
+        </div>
+    </section>
 
-        <div id="resultArea">
-            <div class="saju-grid">
-                <div class="pillar"><span>시주</span><span id="siGan" class="gan"></span><span id="siJi" class="ji"></span></div>
-                <div class="pillar"><span>일주</span><span id="ilGan" class="gan"></span><span id="ilJi" class="ji"></span></div>
-                <div class="pillar"><span>월주</span><span id="wolGan" class="gan"></span><span id="wolJi" class="ji"></span></div>
-                <div class="pillar"><span>연주</span><span id="yeonGan" class="gan"></span><span id="yeonJi" class="ji"></span></div>
+    <section style="background-color: #F9F9F9;">
+        <h2 class="section-title">무료 사주 서비스</h2>
+        <div class="grid-container">
+            <div class="card" onclick="location.href='service.html'">
+                <span class="tag popular">Popular</span>
+                <h3>정밀 만세력</h3>
+                <p>한국천문연구원 데이터를 기반으로<br>오차 없는 사주팔자를 분석합니다.</p>
             </div>
-            
-            <div style="background:#f4f4f4; padding:15px; border-radius:8px;">
-                <div id="daeunInfo" style="font-weight:bold; margin-bottom:10px;"></div>
-                <div id="daeunList" class="daeun-scroll"></div>
+            <div class="card">
+                <span class="tag new">New</span>
+                <h3>성향 테스트</h3>
+                <p>간단한 질문으로 알아보는<br>나의 숨겨진 성향과 기질.</p>
             </div>
+        </div>
+    </section>
+
+    <section style="background-color: #FFFFFF;">
+        <div class="hero-container">
+            <div class="hero-text">
+                <h1>나만의 사주분석<br>결과를 만나보세요</h1>
+                <p>
+                    인생의 나침반이 될 다양한 사주분석서비스.<br>
+                    평생 소장 가능한 감정서를 만나보세요.
+                </p>
+                <a href="analysis.html" class="btn btn-primary">내 사주 분석하기 →</a>
+            </div>
+            <div class="hero-img">
+                <img src="images/char_analysis.png" alt="분석하는 샌님">
+            </div>
+        </div>
+    </section>
+
+    <div class="slider-section">
+        <div class="slider-track">
+            <div class="slide"><img src="images/couple_1.png" alt="커플궁합분석 감정서 보완궁합"></div>
+            <div class="slide"><img src="images/couple_2.png" alt="커플궁합분석 감정서 동조궁합"></div>
+            <div class="slide"><img src="images/couple_3.png" alt="커플궁합분석 감정서 인연궁합"></div>
+            <div class="slide"><img src="images/wedding_1.png" alt="여성 결혼운 분석 감정서 점수"></div>
+            <div class="slide"><img src="images/wedding_2.png" alt="여성 결혼운 분석 감정서 세부지표"></div>
+            <div class="slide"><img src="images/wedding_3.png" alt="여성 결혼운 분석 감정서 10년 운세"></div>
+            <div class="slide"><img src="images/wedding_2.png" alt="여성 결혼운 분석 감정서 인생운"></div>
+            <div class="slide"><img src="images/seun_1.png" alt="신년운세 분석 감정서 종합평가"></div>
+            <div class="slide"><img src="images/seun_2.png" alt="신년운세 분석 감정서 세부평가 월운세"></div>
             
-            <div id="seunInfo" style="margin-top:15px; padding:10px; background:#eef; border-radius:8px;"></div>
+	<div class="slide"><img src="images/couple_1.png" alt="커플궁합분석 감정서 보완궁합"></div>
+            <div class="slide"><img src="images/couple_2.png" alt="커플궁합분석 감정서 동조궁합"></div>
+            <div class="slide"><img src="images/couple_3.png" alt="커플궁합분석 감정서 인연궁합"></div>
+            <div class="slide"><img src="images/wedding_1.png" alt="여성 결혼운 분석 감정서 점수"></div>
+            <div class="slide"><img src="images/wedding_2.png" alt="여성 결혼운 분석 감정서 세부지표"></div>
+            <div class="slide"><img src="images/wedding_3.png" alt="여성 결혼운 분석 감정서 10년 운세"></div>
+            <div class="slide"><img src="images/wedding_2.png" alt="여성 결혼운 분석 감정서 인생운"></div>
+            <div class="slide"><img src="images/seun_1.png" alt="신년운세 분석 감정서 종합평가"></div>
+            <div class="slide"><img src="images/seun_2.png" alt="신년운세 분석 감정서 세부평가 월운세"></div>
         </div>
     </div>
 
-    <script>
-        // 1. 163개 지역 데이터 (인덱스 오류 방지를 위해 전역변수로 선언)
-        const LOCATIONS = [
-            {name: "서울", lon: 126.9783}, {name: "부산", lon: 129.0750}, {name: "대구", lon: 128.6025}, {name: "인천", lon: 126.7052}, 
-            {name: "광주(전라)", lon: 126.8515}, {name: "대전", lon: 127.3845}, {name: "울산", lon: 129.3114}, {name: "세종", lon: 127.2892}, 
-            {name: "경기광주", lon: 127.2554}, {name: "수원", lon: 127.0286}, {name: "성남", lon: 127.1389}, {name: "의정부", lon: 127.0338}, 
-            {name: "안양", lon: 126.9568}, {name: "부천", lon: 126.7660}, {name: "광명", lon: 126.8646}, {name: "평택", lon: 127.1129}, 
-            {name: "동두천", lon: 127.0607}, {name: "안산", lon: 126.8308}, {name: "고양", lon: 126.8317}, {name: "과천", lon: 126.9896}, 
-            {name: "구리", lon: 127.1438}, {name: "남양주", lon: 127.2185}, {name: "오산", lon: 127.0776}, {name: "시흥", lon: 126.8031}, 
-            {name: "군포", lon: 126.9351}, {name: "의왕", lon: 126.9740}, {name: "하남", lon: 127.2142}, {name: "용인", lon: 127.1775}, 
-            {name: "파주", lon: 126.7846}, {name: "이천", lon: 127.4387}, {name: "안성", lon: 127.2792}, {name: "김포", lon: 126.7157}, 
-            {name: "화성", lon: 126.8315}, {name: "양주", lon: 127.0459}, {name: "포천", lon: 127.2003}, {name: "여주", lon: 127.6373}, 
-            {name: "연천", lon: 127.0749}, {name: "가평", lon: 127.5109}, {name: "양평", lon: 127.4872}, {name: "춘천", lon: 127.7298}, 
-            {name: "원주", lon: 127.9515}, {name: "강릉", lon: 128.8759}, {name: "동해", lon: 129.1147}, {name: "태백", lon: 128.9858}, 
-            {name: "속초", lon: 128.5918}, {name: "삼척", lon: 129.1651}, {name: "홍천", lon: 127.8887}, {name: "횡성", lon: 127.9850}, 
-            {name: "영월", lon: 128.4651}, {name: "평창", lon: 128.3962}, {name: "정선", lon: 128.6608}, {name: "철원", lon: 127.3115}, 
-            {name: "화천", lon: 127.7083}, {name: "양구", lon: 127.9904}, {name: "인제", lon: 128.1704}, {name: "고성(강원)", lon: 128.4678}, 
-            {name: "양양", lon: 128.6186}, {name: "청주", lon: 127.4897}, {name: "충주", lon: 127.9287}, {name: "제천", lon: 128.2104}, 
-            {name: "보은", lon: 127.7291}, {name: "옥천", lon: 127.5692}, {name: "영동", lon: 127.7830}, {name: "진천", lon: 127.4357}, 
-            {name: "괴산", lon: 127.7923}, {name: "음성", lon: 127.6905}, {name: "단양", lon: 128.3722}, {name: "증평", lon: 127.5815}, 
-            {name: "천안", lon: 127.1139}, {name: "공주", lon: 127.1247}, {name: "보령", lon: 126.5985}, {name: "아산", lon: 127.0016}, 
-            {name: "서산", lon: 126.4503}, {name: "논산", lon: 127.0847}, {name: "계룡", lon: 127.2526}, {name: "당진", lon: 126.6290}, 
-            {name: "금산", lon: 127.4883}, {name: "부여", lon: 126.9097}, {name: "서천", lon: 126.6908}, {name: "청양", lon: 126.8000}, 
-            {name: "홍성", lon: 126.6629}, {name: "예산", lon: 126.8453}, {name: "태안", lon: 126.2925}, {name: "전주", lon: 127.1480}, 
-            {name: "군산", lon: 126.7360}, {name: "익산", lon: 126.9575}, {name: "정읍", lon: 126.8564}, {name: "남원", lon: 127.3905}, 
-            {name: "김제", lon: 126.8809}, {name: "완주", lon: 127.1627}, {name: "진안", lon: 127.4258}, {name: "무주", lon: 127.6608}, 
-            {name: "장수", lon: 127.5211}, {name: "임실", lon: 127.2889}, {name: "순창", lon: 127.1444}, {name: "고창", lon: 126.7021}, 
-            {name: "부안", lon: 126.7330}, {name: "목포", lon: 126.3922}, {name: "여수", lon: 127.6623}, {name: "순천", lon: 127.4875}, 
-            {name: "나주", lon: 126.7160}, {name: "광양", lon: 127.6959}, {name: "담양", lon: 126.9912}, {name: "곡성", lon: 127.2917}, 
-            {name: "구례", lon: 127.4627}, {name: "고흥", lon: 127.2849}, {name: "보성", lon: 127.1702}, {name: "화순", lon: 126.9880}, 
-            {name: "장흥", lon: 126.9073}, {name: "강진", lon: 126.7699}, {name: "해남", lon: 126.6022}, {name: "영암", lon: 126.4631}, 
-            {name: "무안", lon: 126.4817}, {name: "함평", lon: 126.5167}, {name: "영광", lon: 126.5120}, {name: "장성", lon: 126.7850}, 
-            {name: "완도", lon: 126.7226}, {name: "진도", lon: 126.2635}, {name: "신안", lon: 126.1105}, {name: "포항", lon: 129.3435}, 
-            {name: "경주", lon: 129.2247}, {name: "김천", lon: 128.1189}, {name: "안동", lon: 128.7297}, {name: "구미", lon: 128.3510}, 
-            {name: "영주", lon: 128.6250}, {name: "영천", lon: 128.9385}, {name: "상주", lon: 128.1591}, {name: "문경", lon: 128.1993}, 
-            {name: "경산", lon: 128.7540}, {name: "군위", lon: 128.5728}, {name: "의성", lon: 128.6974}, {name: "청송", lon: 129.0572}, 
-            {name: "영양", lon: 129.1148}, {name: "영덕", lon: 129.3653}, {name: "청도", lon: 128.7340}, {name: "고령", lon: 128.2632}, 
-            {name: "성주", lon: 128.2854}, {name: "칠곡", lon: 128.4067}, {name: "예천", lon: 128.5170}, {name: "봉화", lon: 128.7351}, 
-            {name: "울진", lon: 129.4013}, {name: "울릉", lon: 130.9060}, {name: "독도", lon: 131.8696}, {name: "창원", lon: 128.6811}, 
-            {name: "진주", lon: 128.0848}, {name: "통영", lon: 128.4285}, {name: "사천", lon: 128.0707}, {name: "김해", lon: 128.8893}, 
-            {name: "밀양", lon: 128.7483}, {name: "거제", lon: 128.6211}, {name: "양산", lon: 129.0373}, {name: "의령", lon: 128.2618}, 
-            {name: "함안", lon: 128.4065}, {name: "창녕", lon: 128.4921}, {name: "고성(경남)", lon: 128.3220}, {name: "남해", lon: 127.8926}, 
-            {name: "하동", lon: 127.7515}, {name: "산청", lon: 127.8735}, {name: "함양", lon: 127.7252}, {name: "거창", lon: 127.9095}, 
-            {name: "합천", lon: 128.1658}, {name: "제주", lon: 126.5312}, {name: "서귀포", lon: 126.5601}
-        ];
+    <section style="background-color: #FFFFFF;">
+        <div class="hero-container">
+            <div class="hero-text">
+                <h1>사주 연구가 샌님과<br>상담해보세요</h1>
+                <p>
+                    비대면 채팅 상담부터 심도 있는 대면 상담까지.<br>
+                    원하시는 방식으로 1:1 상담을 예약하세요.
+                </p>
+                <a href="consult.html" class="btn btn-primary">사주 상담 예약하기 →</a>
+            </div>
+            <div class="hero-img">
+                <img src="images/char_consult.png" alt="상담하는 샌님">
+            </div>
+        </div>
+    </section>
 
-        // 2. 초기 로딩 시 지역 목록 채우기
-        window.onload = function() {
-            // 라이브러리 로드 체크
-            if(typeof Solar === 'undefined') {
-                alert("⚠️ 계산 도구(Lunar.js) 로드 실패!\n인터넷 연결을 확인하고 새로고침 하세요.");
-                return;
-            }
-            
-            const sel = document.getElementById('location');
-            sel.innerHTML = '<option value="">지역을 선택하세요</option>';
-            LOCATIONS.sort((a, b) => a.name.localeCompare(b.name));
-            LOCATIONS.forEach((loc, idx) => {
-                let opt = document.createElement('option');
-                opt.value = idx; 
-                opt.text = loc.name;
-                sel.add(opt);
-            });
-        };
+    <footer>
+        <div style="max-width: 150px; margin: 0 auto 20px auto; opacity: 0.5;">
+            <img src="images/logo_header.png" alt="샌님사주">
+        </div>
+        <p>&copy; 2026 샌님사주. All Rights Reserved.</p>
+    </footer>
 
-        // 3. 균시차(EOT) 공식
-        function getEquationOfTime(date) {
-            const start = new Date(date.getFullYear(), 0, 0);
-            const diff = date - start;
-            const dayOfYear = Math.floor(diff / (1000 * 60 * 60 * 24));
-            const B = (2 * Math.PI / 365) * (dayOfYear - 81);
-            return 9.87 * Math.sin(2 * B) - 7.53 * Math.cos(B) - 1.5 * Math.sin(B);
-        }
-
-        // 4. 오행 색상
-        function getElementClass(char) {
-            if("甲乙寅卯".includes(char)) return "wood";
-            if("丙丁巳午".includes(char)) return "fire";
-            if("戊己辰戌丑未".includes(char)) return "earth";
-            if("庚辛申酉".includes(char)) return "metal";
-            if("壬癸亥子".includes(char)) return "water";
-            return "";
-        }
-
-        // 5. 계산 함수 (에러 방지 로직 강화)
-        function calculateSaju() {
-            try {
-                // 입력값 가져오기
-                const bDate = document.getElementById('bDate').value;
-                const bTime = document.getElementById('bTime').value;
-                const locIdx = document.getElementById('location').value;
-                const gender = document.getElementById('gender').value;
-
-                // [중요] 유효성 검사
-                if(!bDate || bDate.length !== 8) return alert("생년월일 8자리를 입력해주세요");
-                if(!bTime || bTime.length !== 4) return alert("출생시간 4자리를 입력해주세요");
-                if(locIdx === "") return alert("지역을 선택해주세요");
-
-                const year = parseInt(bDate.substring(0, 4));
-                const month = parseInt(bDate.substring(4, 6));
-                const day = parseInt(bDate.substring(6, 8));
-                const hour = parseInt(bTime.substring(0, 2));
-                const minute = parseInt(bTime.substring(2, 4));
-
-                // ------------------------------------------------
-                // [진태양시 보정]
-                // 1. 지역 좌표 찾기 (전역변수 배열에서 안전하게 조회)
-                const realLoc = LOCATIONS[locIdx];
-                if (!realLoc) throw new Error("지역 데이터를 찾을 수 없습니다.");
-
-                const lonOffset = (realLoc.lon - 135) * 4;
-                
-                // 2. 균시차 계산
-                const baseDate = new Date(year, month - 1, day, hour, minute);
-                if (isNaN(baseDate.getTime())) throw new Error("날짜 형식이 잘못되었습니다.");
-                
-                const eotOffset = getEquationOfTime(baseDate);
-
-                // 3. 최종 보정 시간
-                let adjDate = new Date(baseDate.getTime());
-                adjDate.setMinutes(adjDate.getMinutes() + lonOffset + eotOffset);
-                // ------------------------------------------------
-
-                // [사주 계산]
-                const lunar = Lunar.fromDate(adjDate);
-                const baZi = lunar.getEightChar();
-                
-                // [화면 출력]
-                const setCell = (idG, idJ, gan, ji) => {
-                    const elG = document.getElementById(idG);
-                    const elJ = document.getElementById(idJ);
-                    elG.innerText = gan; elG.className = "gan " + getElementClass(gan);
-                    elJ.innerText = ji; elJ.className = "ji " + getElementClass(ji);
-                };
-
-                setCell('siGan', 'siJi', baZi.getTimeGan(), baZi.getTimeZhi());
-                setCell('ilGan', 'ilJi', baZi.getDayGan(), baZi.getDayZhi());
-                setCell('wolGan', 'wolJi', baZi.getMonthGan(), baZi.getMonthZhi());
-                setCell('yeonGan', 'yeonJi', baZi.getYearGan(), baZi.getYearZhi());
-
-                // [yun 에러 방지 구역]
-                // gender 값을 숫자(1=남, 0=여)로 명확하게 변환
-                const genderNum = (gender === "남") ? 1 : 0;
-                
-                // baZi 객체가 정상인지 확인 후 호출
-                if (baZi) {
-                    const yun = baZi.getYun(genderNum); // 여기서 에러가 났었음
-                    const dirStr = yun.getGender() === 1 ? "순행" : "역행";
-
-                    document.getElementById('daeunInfo').innerHTML = 
-                        `<span style="color:#2980b9;">${yun.getStartAge()}</span>세 대운 (${dirStr})`;
-
-                    const listDiv = document.getElementById('daeunList');
-                    listDiv.innerHTML = "";
-                    
-                    yun.getDaYun().forEach((dy, i) => {
-                        if(i >= 10) return;
-                        const gan = dy.getGanZhi()[0];
-                        const ji = dy.getGanZhi()[1];
-                        const div = document.createElement('div');
-                        div.className = "daeun-card";
-                        div.innerHTML = `<div class="daeun-age">${dy.getStartAge()}세</div><div><span class="${getElementClass(gan)}" style="font-size:18px; font-weight:bold;">${gan}</span><br><span class="${getElementClass(ji)}" style="font-size:18px; font-weight:bold;">${ji}</span></div>`;
-                        listDiv.appendChild(div);
-                    });
-                }
-
-                // [세운]
-                const thisYearLunar = Lunar.fromDate(new Date());
-                const tyGan = thisYearLunar.getYearGan();
-                const tyJi = thisYearLunar.getYearZhi();
-                document.getElementById('seunInfo').innerHTML = `올해는 <b>${tyGan}${tyJi}</b>년 입니다.`;
-
-                document.getElementById('resultArea').style.display = 'block';
-
-            } catch (e) {
-                console.error(e);
-                alert("계산 중 오류가 발생했습니다: " + e.message);
-            }
-        }
-    </script>
 </body>
 </html>
